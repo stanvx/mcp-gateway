@@ -11,6 +11,14 @@ A flexible gateway server that bridges Model Context Protocol (MCP) STDIO server
 - Automatic cleanup of server resources on connection close
 - YAML-based configuration
 
+## Purpose
+
+At the moment, most MCP servers are designed for local execution. MCP Gateway enables HTTP+SSE capable clients to interact with MCP servers running on remote machines. This addresses common deployment scenarios, such as running [LibreChat](https://github.com/LibreChat/LibreChat) in a containerized environment where certain MCP servers, like the Puppeteer server, may have limited functionality. MCP Gateway provides a robust solution for distributing MCP servers across multiple machines while maintaining seamless connectivity.
+
+## Security Warning
+
+MCP Gateway does not yet provide any authentication or authorization. Run MCP Gateway only on a trusted network!
+
 ## Installation
 
 ```bash
@@ -123,7 +131,7 @@ When a client disconnects, all associated resources are automatically cleaned up
 
 ## Contributing
 
-Feel free to submit issues and pull requests!
+Issues and PRs are welcome, but in all honesty they could languish a while.
 
 ## License
 
