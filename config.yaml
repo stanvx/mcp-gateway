@@ -1,22 +1,38 @@
 hostname: "0.0.0.0"  # Listen on all interfaces by default
 port: 3000
 
+# Debug configuration (optional)
+debug:
+  level: "info"  # Possible values: "error", "warn", "info", "debug", "verbose"
+
+# Authentication configuration (optional)
+# auth:
+#   basic:
+#     enabled: true
+#     credentials:
+#       - username: "admin"
+#         password: "your-secure-password"
+#   bearer:
+#     enabled: true
+#     tokens:
+#       - "your-secure-token"
+
 servers:
+  # run an MCP server with npx
   filesystem:
     command: npx
     args:
       - -y
       - "@modelcontextprotocol/server-filesystem"
       - "/home/aaron"
-    
-  git:
-    command: npx
-    args:
-      - -y
-      - "@modelcontextprotocol/server-git"
 
+  # run a an MCP server from local source
   puppeteer:
-    command: npx
+    command: tsx
     args:
-      - -y
-      - "@modelcontextprotocol/server-puppeteer"
+      - "/home/aaron/AI/MCP-Servers/src/puppeteer/index.ts"
+
+  youtube:
+    command: tsx
+    args:
+      - "/home/aaron/AI/mcp-server-youtube-transcript/src/index.ts"

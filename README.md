@@ -10,14 +10,52 @@ A flexible gateway server that bridges Model Context Protocol (MCP) STDIO server
 - Clean separation between server instances using session IDs
 - Automatic cleanup of server resources on connection close
 - YAML-based configuration
+- Optional Basic and Bearer token authentication
+- Configurable debug logging levels
 
 ## Purpose
 
 At the moment, most MCP servers are designed for local execution. MCP Gateway enables HTTP+SSE capable clients to interact with MCP servers running on remote machines. This addresses common deployment scenarios, such as running [LibreChat](https://github.com/LibreChat/LibreChat) in a containerized environment where certain MCP servers, like the Puppeteer server, may have limited functionality. MCP Gateway provides a robust solution for distributing MCP servers across multiple machines while maintaining seamless connectivity.
 
-## Security Warning
+## Security Features
 
-MCP Gateway does not yet provide any authentication or authorization. Run MCP Gateway only on a trusted network!
+MCP Gateway supports two authentication methods that can be enabled independently:
+
+1. Basic Authentication: Username/password pairs
+2. Bearer Token Authentication: Token-based authentication
+
+Both methods can be enabled simultaneously, and any valid authentication will grant access.
+
+### Authentication Configuration
+
+Add authentication settings to your `config.yaml`:
+
+```yaml
+auth:
+  basic:
+    enabled: true
+    credentials:
+      - username: "admin"
+        password: "your-secure-password"
+      # Add more username/password pairs as needed
+  bearer:
+    enabled: true
+    tokens:
+      - "your-secure-token"
+      # Add more tokens as needed
+```
+
+### Using Authentication
+
+#### Basic Authentication
+```bash
+curl -u username:password http://localhost:3000/serverName
+```
+
+#### Bearer Token Authentication
+```bash
+curl -H "Authorization: Bearer your-secure-token" http://localhost:3000/serverName
+```
 
 ## Installation
 
@@ -28,6 +66,31 @@ npm install
 ## Configuration
 
 The gateway is configured using a YAML file. By default, it looks for `config.yaml` in the current directory, but you can specify a different path using the `CONFIG_PATH` environment variable.
+
+### Debug Configuration
+
+The gateway uses [Winston](https://github.com/winstonjs/winston) for logging, providing rich formatting and multiple log levels:
+
+```yaml
+debug:
+  level: "info"  # Possible values: "error", "warn", "info", "debug", "verbose"
+```
+
+Log levels, from least to most verbose:
+- `error`: Only show errors
+- `warn`: Show warnings and errors
+- `info`: Show general information, warnings, and errors (default)
+- `debug`: Show debug information and all above
+- `verbose`: Show all possible logging information
+
+The logs include timestamps and are color-coded by level when viewing in a terminal. Additional metadata is included as JSON when relevant.
+
+Example log output:
+```
+2024-01-20T10:15:30.123Z [INFO]: New SSE connection for filesystem
+2024-01-20T10:15:30.124Z [DEBUG]: Server instance created with sessionId: /filesystem?sessionId=abc123
+2024-01-20T10:15:30.125Z [VERBOSE]: STDIO message received: {"type":"ready"}
+```
 
 ### Basic Configuration Example
 
@@ -87,6 +150,33 @@ servers:
       - -y
       - "@modelcontextprotocol/server-mytype"
       - "--some-option"
+```
+
+### Complete Configuration Example
+
+```yaml
+hostname: "0.0.0.0"
+port: 3000
+
+# Authentication configuration (optional)
+auth:
+  basic:
+    enabled: true
+    credentials:
+      - username: "admin"
+        password: "your-secure-password"
+  bearer:
+    enabled: true
+    tokens:
+      - "your-secure-token"
+
+servers:
+  filesystem:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - "/path/to/root"
 ```
 
 ## Running the Gateway
