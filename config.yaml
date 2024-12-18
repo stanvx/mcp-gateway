@@ -1,0 +1,22 @@
+hostname: "0.0.0.0"  # Listen on all interfaces by default
+port: 3000
+
+servers:
+  filesystem:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-filesystem"
+      - "/home/aaron"
+    
+  git:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-git"
+
+  puppeteer:
+    command: npx
+    args:
+      - -y
+      - "@modelcontextprotocol/server-puppeteer"

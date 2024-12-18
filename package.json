@@ -1,0 +1,22 @@
+{
+  "name": "mcp-gateway",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/gateway.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "latest",
+    "@types/node": "^22.10.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.0",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
