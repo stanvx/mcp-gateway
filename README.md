@@ -1,6 +1,6 @@
 # MCP Gateway
 
-A flexible gateway server that bridges Model Context Protocol (MCP) STDIO servers to HTTP+SSE, enabling multi-instance MCP servers to be exposed over HTTP.
+A flexible gateway server that bridges Model Context Protocol (MCP) STDIO servers to MCP HTTP+SSE and REST API, enabling multi-instance MCP servers to be exposed over HTTP.
 
 ## Features
 
@@ -12,6 +12,54 @@ A flexible gateway server that bridges Model Context Protocol (MCP) STDIO server
 - YAML-based configuration
 - Optional Basic and Bearer token authentication
 - Configurable debug logging levels
+- REST API Support
+
+## REST API Support
+
+MCP Gateway now provides a REST API interface to MCP servers, making them accessible to any HTTP client that supports OpenAPI/Swagger specifications. This feature is particularly useful for integrating with OpenAI's custom GPTs and other REST API clients.
+
+### REST API Endpoints
+
+Before making tool calls, you need to get a session ID:
+```bash
+curl "http://localhost:3000/api/sessionid"
+# Returns: {"sessionId": "<generated-id>"}
+```
+
+Each tool exposed by an MCP server is available at:
+```
+POST /api/{serverName}/{toolName}?sessionId={session-id}
+```
+Note: The `sessionId` query parameter is required for all tool calls.
+
+For example, to call the `directory_tree` tool on a `filesystem` MCP server:
+```bash
+# First get a session ID
+SESSION_ID=$(curl -s "http://localhost:3000/api/sessionid" | jq -r .sessionId)
+
+# Then make the tool call
+curl -X POST "http://localhost:3000/api/filesystem/directory_tree?sessionId=$SESSION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"path": "/some/path"}'
+```
+
+### OpenAPI Schema Generation
+
+The gateway can generate OpenAPI schemas for all configured tools, making it easy to integrate with OpenAPI-compatible clients:
+
+```bash
+# Generate YAML format (default)
+npm start -- --schemaDump
+
+# Generate JSON format
+npm start -- --schemaDump --schemaFormat json
+```
+
+The generated schema includes:
+- All available endpoints for each configured server
+- Tool descriptions and parameter schemas
+- Request/response formats
+- Authentication requirements
 
 ## Purpose
 
@@ -226,3 +274,8 @@ Issues and PRs are welcome, but in all honesty they could languish a while.
 ## License
 
 MIT License
+
+
+curl -X POST   "http://localhost:3000/api/filesystem/directory_tree?sessionId=randomSession12345"   -H "Content-Type: application/json"   -d '{
+    "path": "/home/aaron/Clara"
+}'
