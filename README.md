@@ -1,6 +1,6 @@
 # MCP Gateway
 
-A flexible gateway server that bridges Model Context Protocol (MCP) STDIO servers to HTTP+SSE, enabling multi-instance MCP servers to be exposed over HTTP.
+A flexible gateway server that bridges Model Context Protocol (MCP) STDIO servers to MCP HTTP+SSE and REST API, enabling multi-instance MCP servers to be exposed over HTTP.
 
 ## Features
 
@@ -12,6 +12,54 @@ A flexible gateway server that bridges Model Context Protocol (MCP) STDIO server
 - YAML-based configuration
 - Optional Basic and Bearer token authentication
 - Configurable debug logging levels
+- REST API Support
+
+## REST API Support
+
+MCP Gateway now provides a REST API interface to MCP servers, making them accessible to any HTTP client that supports OpenAPI/Swagger specifications. This feature is particularly useful for integrating with OpenAI's custom GPTs and other REST API clients.
+
+### REST API Endpoints
+
+Before making tool calls, you need to get a session ID:
+```bash
+curl "http://localhost:3000/api/sessionid"
+# Returns: {"sessionId": "<generated-id>"}
+```
+
+Each tool exposed by an MCP server is available at:
+```
+POST /api/{serverName}/{toolName}?sessionId={session-id}
+```
+Note: The `sessionId` query parameter is required for all tool calls.
+
+For example, to call the `directory_tree` tool on a `filesystem` MCP server:
+```bash
+# First get a session ID
+SESSION_ID=$(curl -s "http://localhost:3000/api/sessionid" | jq -r .sessionId)
+
+# Then make the tool call
+curl -X POST "http://localhost:3000/api/filesystem/directory_tree?sessionId=$SESSION_ID" \
+  -H "Content-Type: application/json" \
+  -d '{"path": "/some/path"}'
+```
+
+### OpenAPI Schema Generation
+
+The gateway can generate OpenAPI schemas for all configured tools, making it easy to integrate with OpenAPI-compatible clients:
+
+```bash
+# Generate YAML format (default)
+npm start -- --schemaDump
+
+# Generate JSON format
+npm start -- --schemaDump --schemaFormat json
+```
+
+The generated schema includes:
+- All available endpoints for each configured server
+- Tool descriptions and parameter schemas
+- Request/response formats
+- Authentication requirements
 
 ## Purpose
 
@@ -191,6 +239,50 @@ With custom config:
 CONFIG_PATH=/path/to/my/config.yaml npm start
 ```
 
+## Docker Support
+
+The MCP Gateway is available as a Docker container with support for running various types of MCP servers (Python, Node.js, TypeScript, Kotlin). The container comes pre-installed with common development tools and MCP utilities.
+
+### Using the Pre-built Image
+
+Pull and run the container from GitHub Container Registry:
+
+```bash
+# Pull the image
+docker pull ghcr.io/[your-github-username]/mcp-gateway:latest
+
+# Run with default configuration
+docker run -p 3000:3000 ghcr.io/[your-github-username]/mcp-gateway:latest
+
+# Run with custom config
+docker run -p 3000:3000 -v $(pwd)/config.yaml:/app/config.yaml ghcr.io/[your-github-username]/mcp-gateway:latest
+```
+
+### Building Locally
+
+You can also build the container locally:
+
+```bash
+# Build the image
+docker build -t mcp-gateway .
+
+# Run the container
+docker run -p 3000:3000 mcp-gateway
+```
+
+### Container Features
+
+The Docker container includes:
+- Node.js 20.x with npm
+- Python 3 with pip
+- Kotlin and Java (via SDKMAN)
+- Common MCP tools pre-installed:
+  - @modelcontextprotocol/create-server
+  - @modelcontextprotocol/server-filesystem
+  - @modelcontextprotocol/server-git
+
+This enables running various types of MCP servers within the container environment.
+
 ## Adding New Server Types
 
 1. Install the MCP server package you want to use
@@ -226,3 +318,8 @@ Issues and PRs are welcome, but in all honesty they could languish a while.
 ## License
 
 MIT License
+
+
+curl -X POST   "http://localhost:3000/api/filesystem/directory_tree?sessionId=randomSession12345"   -H "Content-Type: application/json"   -d '{
+    "path": "/home/aaron/Clara"
+}'
