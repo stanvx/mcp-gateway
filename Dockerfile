@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Install Python and pytz for MCP time server
-apk add --no-cache \
+RUN apk add --no-cache \
     python3 \
     py3-pip \
     py3-pytz \
