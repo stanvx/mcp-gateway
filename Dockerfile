@@ -4,7 +4,6 @@ FROM node:20-alpine
 # Install Python and pytz for MCP time server
 RUN apk add --no-cache python3
 RUN apk add --no-cache py3-pip
-RUN apk add --no-cache py3-pytz
 RUN apk add --no-cache openssl
 RUN apk add --no-cache libffi
 
