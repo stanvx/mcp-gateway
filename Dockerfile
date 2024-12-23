@@ -2,8 +2,13 @@
 FROM node:20-alpine
 
 # Install Python and pytz for MCP time server
-RUN apk add --no-cache \
-    python3
+apk add --no-cache \
+    python3 \
+    py3-pip \
+    py3-pytz \
+    openssl \
+    libffi \
+    build-base
 
 # Create app directory
 WORKDIR /app
