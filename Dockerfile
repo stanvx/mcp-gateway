@@ -1,9 +1,11 @@
 # Use official Node.js Alpine image as base
 FROM node:20-alpine
 
-# Install Python for MCP time server
-RUN apk add --no-cache python3 py3-pip && \
-    pip3 install --no-cache-dir pytz
+# Install Python and pytz for MCP time server
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    py3-pytz
 
 # Create app directory
 WORKDIR /app
