@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Install Python and pytz
-RUN apk add --no-cache python3 py3-pytz openssl libffi
+RUN apk add --no-cache python3 openssl libffi
 
 # Create app directory
 WORKDIR /app
