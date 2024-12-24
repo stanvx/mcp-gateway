@@ -6,6 +6,9 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 # Install Python and pytz
 RUN apk add --no-cache python3 openssl libffi py3-pip
 
+# Install playwright
+npx playwright install
+
 # Install Chromium browser
 RUN npx playwright install chromium
 
