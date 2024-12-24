@@ -1,5 +1,7 @@
 # Use official Node.js Alpine image as base
 FROM node:20-alpine
+# Copy uv files
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Install Python and pytz
 RUN apk add --no-cache python3 openssl libffi py3-pip
