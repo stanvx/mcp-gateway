@@ -25,11 +25,23 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # Install dependencies for Puppeteer
-RUN apk add --no-cache wget gnupg \
-  && apk add --no-cache fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-  libgtk2.0-0 libnss3 libatk-bridge2.0-0 libdrm2 libxkbcommon0 libgbm1 libasound2 \
-  && apk add --no-cache chromium \
-  && apk clean
+RUN apk add --no-cache \
+    wget \
+    gnupg \
+    ttf-freefont \
+    ttf-dejavu \
+    ttf-droid \
+    ttf-liberation \
+    ttf-ubuntu-font-family \
+    libxss \
+    gtk+2.0 \
+    nss \
+    at-spi2-atk \
+    libdrm \
+    libxkbcommon \
+    mesa-gbm \
+    alsa-lib \
+    chromium
 
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
