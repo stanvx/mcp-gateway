@@ -32,10 +32,10 @@ RUN apk add --no-cache \
     ttf-dejavu \
     ttf-droid \
     ttf-liberation \
-    ttf-ubuntu-font-family \
     libxss \
     gtk+2.0 \
     nss \
+    at-spi2-core \
     at-spi2-atk \
     libdrm \
     libxkbcommon \
