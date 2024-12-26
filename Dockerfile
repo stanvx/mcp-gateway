@@ -32,11 +32,9 @@ RUN apk add --no-cache \
     ttf-dejavu \
     ttf-droid \
     ttf-liberation \
-    libxss \
+    libxscrnsaver \
     gtk+2.0 \
     nss \
-    at-spi2-core \
-    at-spi2-atk \
     libdrm \
     libxkbcommon \
     mesa-gbm \
