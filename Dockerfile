@@ -1,5 +1,5 @@
 # Use official Node.js Alpine image as base
-FROM node:20-alpine
+FROM node:22-alpine
 # Copy uv files
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
