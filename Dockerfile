@@ -59,7 +59,7 @@ COPY src/ ./src/
 
 COPY --chown=node docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
-ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 
 # Use node user (already exists in Alpine image)
 USER node
