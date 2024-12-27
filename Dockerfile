@@ -29,6 +29,7 @@ RUN apk upgrade --no-cache --available \
     && apk add --no-cache \
       --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
       font-wqy-zenhei
+RUN apk add --no-cache xvfb
 
 # Environment variables for Puppeteer
 ENV DOCKER_CONTAINER=true
@@ -37,6 +38,8 @@ ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
 ENV CHROMIUM_FLAGS="--disable-software-rasterizer --disable-dev-shm-usage"
 ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
+
+ENV DISPLAY :99
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 VOLUME ["/downloads"]
@@ -54,8 +57,9 @@ RUN npm ci
 COPY tsconfig.json ./
 COPY src/ ./src/
 
-# Note: config.yaml should be mounted at runtime:
-# docker run -v /path/to/your/config.yaml:/app/config.yaml ...
+COPY --chown=node docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
 
 # Use node user (already exists in Alpine image)
 USER node
@@ -65,3 +69,6 @@ EXPOSE 3000
 
 # Start the application
 CMD ["npm", "start"]
+
+# Note: config.yaml should be mounted at runtime:
+# docker run -v /path/to/your/config.yaml:/app/config.yaml ...
