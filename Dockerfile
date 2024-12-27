@@ -27,20 +27,26 @@ ENV PUPPETEER_EXECUTABLE_PATH=/usr/lib/chromium
 
 # Install dependencies for Puppeteer
 RUN apk add --no-cache \
+    udev \
+    ttf-freefont \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
     wget \
     gnupg \
-    ttf-freefont \
-    ttf-dejavu \
-    ttf-droid \
-    ttf-liberation \
-    libxscrnsaver \
-    gtk+2.0 \
-    nss \
-    libdrm \
-    libxkbcommon \
-    mesa-gbm \
+    libstdc++ \
+    libx11 \
+    libxcomposite \
+    libxdamage \
+    libxext \
+    libxrandr \
+    mesa-gl \
     alsa-lib \
-    chromium
+    libxshmfence \
+    libdrm
 
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
