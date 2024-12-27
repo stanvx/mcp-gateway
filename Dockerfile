@@ -21,8 +21,9 @@ RUN set -x \
 && chmod 777 /.cache
 
 # Environment variables for Puppeteer
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+ENV DOCKER_CONTAINER=true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/lib/chromium
 
 # Install dependencies for Puppeteer
 RUN apk add --no-cache \
