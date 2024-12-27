@@ -20,34 +20,23 @@ RUN set -x \
 && mkdir -p /.cache \
 && chmod 777 /.cache
 
+# Install dependencies for Puppeteer
+RUN apk upgrade --no-cache --available \
+    && apk add --no-cache \
+      chromium-swiftshader \
+      ttf-freefont \
+      font-noto-emoji \
+    && apk add --no-cache \
+      --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
+      font-wqy-zenhei
+
 # Environment variables for Puppeteer
 ENV DOCKER_CONTAINER=true
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/lib/chromium
-
-# Install dependencies for Puppeteer
-RUN apk add --no-cache \
-    udev \
-    ttf-freefont \
-    chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
-    ca-certificates \
-    wget \
-    gnupg \
-    libstdc++ \
-    libx11 \
-    libxcomposite \
-    libxdamage \
-    libxext \
-    libxrandr \
-    mesa-gl \
-    alsa-lib \
-    libxshmfence \
-    libdrm
-
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD 1
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+ENV CHROMIUM_FLAGS="--disable-software-rasterizer --disable-dev-shm-usage"
+ENV CHROME_BIN=/usr/bin/chromium-browser \
+    CHROME_PATH=/usr/lib/chromium/
 ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 VOLUME ["/downloads"]
