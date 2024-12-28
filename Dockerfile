@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:23-alpine
 
 # Copy uv files
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
