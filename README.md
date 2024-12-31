@@ -2,6 +2,34 @@
 
 A flexible gateway server that bridges Model Context Protocol (MCP) STDIO servers to MCP HTTP+SSE and REST API, enabling multi-instance MCP servers to be exposed over HTTP.
 
+## Experimental Docker Support 🐳
+
+This MCP Gateway branch includes support for running in a Docker container. The container is designed with essential dependencies for a variety of MCP servers that I use. It is **experimental** and I will continue to change and break things as my needs and MCP servers change.
+
+### Quick Start with Docker
+
+```bash
+# Build the Docker image
+docker build -t mcp-gateway .
+
+# Run the Docker container using the default configuration
+docker run -p 3000:3000 mcp-gateway
+
+# Run with a custom configuration and mount a volume for file persistence
+docker run -p 3000:3000 \
+  -v $(pwd)/config.yaml:/app/config.yaml \
+  -v $(pwd)/downloads:/downloads \
+  mcp-gateway
+```
+
+### Features and Dependencies in the Container
+
+- **Node.js 23**: For running JavaScript-based MCP servers.
+- **Python 3 with pip**: For Python-based MCP servers.
+- **Chromium with SwiftShader**: Supports headless Chrome for Puppeteer. Source [landure/alpine-chrome](https://github.com/jlandure/alpine-chrome)
+- **FFmpeg**: For media encoding/decoding tasks such as yt-dlp.
+- **Xvfb**: Enables headless graphical applications in a virtual framebuffer environment.
+
 ## Features
 
 - Run multiple instances of the same MCP server type
@@ -238,50 +266,6 @@ With custom config:
 ```bash
 CONFIG_PATH=/path/to/my/config.yaml npm start
 ```
-
-## Docker Support
-
-The MCP Gateway is available as a Docker container with support for running various types of MCP servers (Python, Node.js, TypeScript, Kotlin). The container comes pre-installed with common development tools and MCP utilities.
-
-### Using the Pre-built Image
-
-Pull and run the container from GitHub Container Registry:
-
-```bash
-# Pull the image
-docker pull ghcr.io/[your-github-username]/mcp-gateway:latest
-
-# Run with default configuration
-docker run -p 3000:3000 ghcr.io/[your-github-username]/mcp-gateway:latest
-
-# Run with custom config
-docker run -p 3000:3000 -v $(pwd)/config.yaml:/app/config.yaml ghcr.io/[your-github-username]/mcp-gateway:latest
-```
-
-### Building Locally
-
-You can also build the container locally:
-
-```bash
-# Build the image
-docker build -t mcp-gateway .
-
-# Run the container
-docker run -p 3000:3000 mcp-gateway
-```
-
-### Container Features
-
-The Docker container includes:
-- Node.js 20.x with npm
-- Python 3 with pip
-- Kotlin and Java (via SDKMAN)
-- Common MCP tools pre-installed:
-  - @modelcontextprotocol/create-server
-  - @modelcontextprotocol/server-filesystem
-  - @modelcontextprotocol/server-git
-
-This enables running various types of MCP servers within the container environment.
 
 ## Adding New Server Types
 

@@ -13,6 +13,6 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "pip"
-    directory: "/" # Adjust this if your Python dependencies are located in a specific directory
+    directory: "/"
     schedule:
       interval: "weekly"
