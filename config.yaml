@@ -18,7 +18,7 @@ debug:
 #       - "your-secure-token"
 
 servers:
-  # run an MCP server with npx
+  # Run MCP servers with npx
   filesystem:
     command: npx
     args:
@@ -26,13 +26,31 @@ servers:
       - "@modelcontextprotocol/server-filesystem"
       - "/home/aaron"
 
-  # run a an MCP server from local source
-  puppeteer:
-    command: tsx
+  brave-search:
+    command: npx
     args:
-      - "/home/aaron/AI/MCP-Servers/src/puppeteer/index.ts"
+      - -y
+      - "@modelcontextprotocol/server-brave-search"
 
-  youtube:
-    command: tsx
+  puppeteer:
+    command: npx
     args:
-      - "/home/aaron/AI/mcp-server-youtube-transcript/src/index.ts"
+      - -y
+      - "@modelcontextprotocol/server-puppeteer"
+
+  # Run MCP servers with uvx
+  time:
+    command: uvx
+    args:
+      - mcp-server-time
+      - --local-timezone=Australia/Melbourne
+  mcp-server-fetch:
+    command: uvx
+    args:
+      - mcp-server-fetch
+
+  #  run an MCP server from local source
+#  puppeteer-local:
+#    command: tsx
+#    args:
+#      - "/home/aaron/AI/MCP-Servers/src/puppeteer/index.ts"

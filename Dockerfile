@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     ffmpeg \
     tini \
     xvfb \
+    coreutils \
     # Chrome dependencies
     chromium-swiftshader \
     ttf-freefont \

@@ -12,14 +12,15 @@ This MCP Gateway branch includes support for running in a Docker container. The 
 # Build the Docker image
 docker build -t mcp-gateway .
 
-# Run the Docker container using the default configuration
-docker run -p 3000:3000 mcp-gateway
-
-# Run with a custom configuration and mount a volume for file persistence
+# Run the Docker container with a configuration and mount downloads for file persistence
 docker run -p 3000:3000 \
   -v $(pwd)/config.yaml:/app/config.yaml \
   -v $(pwd)/downloads:/downloads \
+  --name mcp-gateway \
   mcp-gateway
+
+# Connect to it
+docker exec -it mcp-gateway /bin/sh
 ```
 
 ### Features and Dependencies in the Container
